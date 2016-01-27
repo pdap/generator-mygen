@@ -1,0 +1,23 @@
+{
+  "name": "generator-mygen",
+  "version": "0.1.0",
+  "description": "mgen",
+  "files": [
+    "app",
+    "router"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.20.3"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "readme": "README.md",
+  "author": "pdap",
+  "license": "ISC"
+}
