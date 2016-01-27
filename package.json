@@ -1,6 +1,6 @@
 {
   "name": "generator-mygen",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "mgen",
   "files": [
     "app",
@@ -17,6 +17,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+  "type": "git",
+  "url": "http://github.com/pdap/generator-mygen.git"
+},
+ "bugs": {  
+  "url": "http://github.com/pdap/generator-mygen/issues",
+  "email": "1150992600@qq.com"
+},
   "readme": "README.md",
   "author": "pdap",
   "license": "ISC"
