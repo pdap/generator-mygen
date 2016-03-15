@@ -1,31 +1,63 @@
 module.exports = function(grunt) {
-
+   /**
+    * js文件处理目录 
+    * @type {Array}
+    */
     var votenew = [{
-        "js/koubeiout.js": [
-        "src/velocity.min.js",
-        "src/radio.js",
-            "src/cookie.js",
-            "src/vote.js",
-            "src/koubei.js" 
+        "js/app.js": [
+        "src/index.js" 
         ]
     }];
-    var lrPort=35729;
-    // 使用 middleware(中间件)，就必须关闭 LiveReload 的浏览器插件
-    var serveStatic = require('serve-static');
-   var serveIndex = require('serve-index');
-    // 使用connect-livereload模块，生成一个与LiveReload脚本
-  // <script src="http://127.0.0.1:35729/livereload.js?snipver=1" type="text/javascript"></script>
-     var lrSnippet = require('connect-livereload')({ port: lrPort });
-     var lrMiddleware = function(connect, options) {
-    return [
-      // 把脚本，注入到静态文件中
-      lrSnippet,
-      // 静态文件服务器的路径
-      serveStatic(options.base[0]),
-      // 启用目录浏览(相当于IIS中的目录浏览)
-      serveIndex(options.base[0])
+    /**
+     * 反向代理配置
+     * @type {Array}
+     */
+   var proxyroutes = [
+        {   api:'/api',
+            target: 'http://poll.chinaso365.com/api_poll.php'
+        },
+        {   api:'/static/json/',
+            target:'http://focus.chinaso.com/static/json/'
+        }
     ];
-  };
+    var url = require('url');
+    var proxy = require('proxy-middleware');
+    var lrPort=35729;
+    function  _proxy(proxys){
+        var arr=[];
+        if (!(typeof  proxys  == "object" &&  proxys.constructor == Array) ){
+            return false;
+        };
+
+        for (var i = proxys.length - 1; i >= 0; i--) {
+             var proxyOption = url.parse(proxys[i].target);
+             proxyOption.route = proxys[i].api;
+           
+           arr.push(proxy(proxyOption));
+        };
+        return arr;
+    }
+
+    // 使用 middleware(中间件)
+    var lrSnippet = require('connect-livereload')({ port: lrPort });
+    var serveStatic = require('serve-static');
+    var serveIndex = require('serve-index');
+
+   // connect-livereload模块，生成一个与LiveReload脚本
+   // <script src="http://127.0.0.1:35729/livereload.js?snipver=1" type="text/javascript"></script>
+     
+    var lrMiddleware = function(connect, options) {
+        var mdrouters = [
+            //liveReload中间件
+            lrSnippet,
+            // 静态文件服务器中间件
+            serveStatic(options.base[0]),
+            // 启用目录浏览中间件
+            serveIndex(options.base[0])
+        ];
+        console.log('中间件加载完毕');
+        return _proxy(proxyroutes).concat(mdrouters);
+    };
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         qunit: {
@@ -46,19 +78,50 @@ module.exports = function(grunt) {
           // 通过LiveReload脚本，让页面重新加载。
           middleware: lrMiddleware
         }
-      }
+      },
+
     },
     // 通过watch任务，来监听文件是否有更改
     watch: {
-      client: {
+      jsbuild: {
         tasks:['convotenew'],
-        // 我们不需要配置额外的任务，watch任务已经内建LiveReload浏览器刷新的代码片段。
+        // 
         options: {
           livereload: lrPort
         },
         // '**' 表示包含所有的子目录
         // '*' 表示包含所有的文件
-        files: ['../../tel/*.html', 'css/*', 'src/*', 'image/**/*']
+        files: [ 'src/*']
+      },      
+      cssbuild: {
+        tasks:[],
+        // 
+        options: {
+          livereload: lrPort
+        },
+        // '**' 表示包含所有的子目录
+        // '*' 表示包含所有的文件
+        files: ['css/*']
+      },
+      htmlbuild: {
+        tasks:[],
+        // 
+        options: {
+          livereload: lrPort
+        },
+        // '**' 表示包含所有的子目录
+        // '*' 表示包含所有的文件
+        files: ['../../tel/*.html']
+      },
+      imagebuild: {
+        tasks:[],
+        // 
+        options: {
+          livereload: lrPort
+        },
+        // '**' 表示包含所有的子目录
+        // '*' 表示包含所有的文件
+        files: ['image/**/*']
       }
     },
         jshint: {
@@ -132,22 +195,35 @@ module.exports = function(grunt) {
                     dest: "static/image/dest/" // 输出目录(直接覆盖原图)
                 }]
             }
+        },
+        open: {
+            options: {
+                delay: 500
+            },
+            dev    : {
+                path: 'http://127.0.0.1:<%= connect.options.port %>/tel/'
+            },
+            dist   : {
+                path: 'http://127.0.0.1:<%= connect.options.port %>/'
+            }
         }
+
     });
 
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    //grunt.loadNpmTasks("grunt-contrib-qunit");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     //grunt.loadNpmTasks("grunt-css");
     //grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-connect');
-   
+
+    grunt.loadNpmTasks("grunt-open");
  
   // 自定义任务
-    grunt.registerTask('live', ['connect', 'watch']);
+    grunt.registerTask('live', ['connect','open:dev', 'watch']);
     grunt.registerTask("minimg", ["imagemin:dynamic"]);
     grunt.registerTask("convotenew", ["concat:votenew"]);
     grunt.registerTask("dist", ["uglify:votenew"]);
+    grunt.registerTask('default',['connect', 'open:dev','watch']);
 };
