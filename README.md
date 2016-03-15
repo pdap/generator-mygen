@@ -25,9 +25,15 @@ yo mygen
  * Feel free to [learn more about Yeoman](http://yeoman.io/).
  ##  版本更新
 
- * v1.2.5
- ### js css html img 的watch 分离，js有变化后只运行js 的task 然后刷新浏览器，为后续增加css,html的特殊task做准备
+ ### v1.2.5
+ * js css html img 的watch 分离，js有变化后只运行js 的task 然后刷新浏览器，为后续增加css,html的特殊task做准备
 
- * v1.2.6 
- ### 增加open功能,http服务启动之后自动打开项目目录
- ### 增加proxy 代理功能，将本地路径比如(127.0.0.1:8089/data/poll/--->http://poll.chinaso365.com/api_poll.php)下的请求代理到后端主机，解决接口调试跨域问题。
+ ### v1.2.6 
+ * 增加open功能,http服务启动之后自动打开项目目录
+ * 增加proxy 代理功能，将本地路径比如(127.0.0.1:8089/data/poll/--->http://poll.chinaso365.com/api_poll.php)下的请求代理到后端主机，解决接口调试跨域问题。
+
+ ### v1.2.7
+ * 更新说明文档
+
+ ### v1.2.8
+ * 说明文档版本更新排版
