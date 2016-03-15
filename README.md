@@ -23,3 +23,11 @@ yo mygen
  * Yeoman is a person with feelings and opinions, but is very easy to work with.
  * Yeoman can be too opinionated at times but is easily convinced not to be.
  * Feel free to [learn more about Yeoman](http://yeoman.io/).
+ ##  版本更新
+
+ * v1.2.5
+ ### js css html img 的watch 分离，js有变化后只运行js 的task 然后刷新浏览器，为后续增加css,html的特殊task做准备
+
+ * v1.2.6 
+ ### 增加open功能,http服务启动之后自动打开项目目录
+ ### 增加proxy 代理功能，将本地路径比如(127.0.0.1:8089/data/poll/--->http://poll.chinaso365.com/api_poll.php)下的请求代理到后端主机，解决接口调试跨域问题。

@@ -1,6 +1,6 @@
 {
   "name": "generator-mygen",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "mgen",
   "files": [
     "app",
