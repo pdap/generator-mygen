@@ -137,21 +137,26 @@ module.exports = function(grunt) {
                 }
             },
             files: [
-                "static/js/idx.build.js"
+                "js/*.js"
             ]
         },
         cssmin: {
             options: {
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */'
+            compatibility: 'ie7',
+            // 保留css hack 重要配置
+            shorthandCompacting: false,
+             banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */'
             },
             beautify: {
                 ascii_only: true
             },
             index: {
                 files: [{
-                    "static/css/video-index.css": [
-                        "static/css/video-index.dev.css"
-                    ]
+                    expand:true,
+  
+                   src: ['css/*.css', '!*.min.css'],
+                   dest: 'css/',
+                   ext: '.min.css'
                 }]
             }
         },
@@ -209,12 +214,12 @@ module.exports = function(grunt) {
         }
 
     });
-
+  
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    //grunt.loadNpmTasks("grunt-css");
+    grunt.loadNpmTasks("grunt-contrib-cssmin");
     //grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-connect');
 

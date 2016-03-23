@@ -37,3 +37,7 @@ yo mygen
 
  ### v1.2.8
  * 说明文档版本更新排版
+
+ ### v1.2.9
+ * 优化css压缩程序配置参数以保留ie6/ie7 css hack例如`_background`|`*background`等等 
+ 
