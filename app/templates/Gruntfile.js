@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     * @type {Array}
     */
     var votenew = [{
-        "js/app.js": [
+        "js/pjax.js": [
         "src/index.js" 
         ]
     }];
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
         },
         // '**' 表示包含所有的子目录
         // '*' 表示包含所有的文件
-        files: ['css/*']
+        files: ['css/*.css']
       },
       htmlbuild: {
         tasks:[],
@@ -124,28 +124,11 @@ module.exports = function(grunt) {
         files: ['image/**/*']
       }
     },
-        jshint: {
-            option: {
-                curly: true,
-                eqeqeq: true,
-                eqnull: true,
-                browser: true,
-                globals: {
-                    jQuery: true,
-                    console: true,
-                    module: true
-                }
-            },
-            files: [
-                "js/*.js"
-            ]
-        },
+  
         cssmin: {
             options: {
             compatibility: 'ie7',
-            // 保留css hack 重要配置
-            shorthandCompacting: false,
-             banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */'
+            shorthandCompacting: false
             },
             beautify: {
                 ascii_only: true
@@ -158,6 +141,19 @@ module.exports = function(grunt) {
                    dest: 'css/',
                    ext: '.min.css'
                 }]
+
+            }
+        },
+        usebanner:{
+            cssbanner:{
+                options:{
+                    position:'top',
+                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */',
+                    linebreak: true
+                },
+                files: {
+                src: [ 'css/css/*.css' ]
+                }
             }
         },
         concat: {
@@ -168,8 +164,6 @@ module.exports = function(grunt) {
             votenew: {
                 files: votenew
             }
-
-
 
         },
         uglify: {
@@ -188,19 +182,6 @@ module.exports = function(grunt) {
 
 
         },
-        imagemin: {
-            dynamic: {
-                options: {
-                    optimizationLevel: 3 // png图片优化水平，3是默认值，取值区间0-7
-                },
-                files: [{
-                    expand: true, // 开启动态扩展
-                    cwd: "static/image/sp_vote/", // 当前工作路径
-                    src: ["**/*.{png,jpg,gif}"], // 要出处理的文件格式(images下的所有png,jpg,gif)
-                    dest: "static/image/dest/" // 输出目录(直接覆盖原图)
-                }]
-            }
-        },
         open: {
             options: {
                 delay: 500
@@ -214,21 +195,18 @@ module.exports = function(grunt) {
         }
 
     });
-  
-    grunt.loadNpmTasks("grunt-contrib-jshint");
+ 
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
-    //grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-connect');
-
+    grunt.loadNpmTasks('grunt-banner');
     grunt.loadNpmTasks("grunt-open");
  
   // 自定义任务
     grunt.registerTask('live', ['connect','open:dev', 'watch']);
-    grunt.registerTask("minimg", ["imagemin:dynamic"]);
-    grunt.registerTask("convotenew", ["concat:votenew"]);
     grunt.registerTask("dist", ["uglify:votenew"]);
-    grunt.registerTask('default',['connect', 'open:dev','watch']);
+    grunt.registerTask("dev", ["concat:votenew"]);
+    grunt.registerTask('default','live');
 };

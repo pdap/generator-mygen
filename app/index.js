@@ -82,11 +82,15 @@ module.exports = generators.Base.extend({
     if (this.options.full) {
       this.directory('./', './', {});
     } else {
-      this.copy(this.templatePath('src/index.js'), this.destinationPath('src/index.js'), {});
-      this.copy(this.templatePath('Gruntfile.js'), this.destinationPath('Gruntfile.js'), {});
-      //this.copy(this.templatePath('README.md'), this.destinationPath('README.md'), {});
+     this.bulkCopy(this.templatePath('src/index.js'), this.destinationPath('src/index.js'));
+     this.bulkCopy(this.templatePath('Gruntfile.js'), this.destinationPath('Gruntfile.js'));
+     this.template('README.md', 'README.md', {
+      generatorName: this.config.name,
+      yoName:  this.config.name.replace('generator-','')
+    }, {});
     };
     this.pkg = this.fs.readJSON(this.templatePath('package.json'), {});
+    console.log(this.pkg);
     extend(this.pkg, {
       name: this.props.name || 'name',
       version: this.props.version || '0.1.0',
@@ -108,10 +112,7 @@ module.exports = generators.Base.extend({
   writing: function() {
     this.log(this.config.name);
     this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
-    this.template('README.md', 'README.md', {
-      generatorName: this.config.name,
-      yoName:  this.config.name.replace('generator-','')
-    }, {});
+
     
     /*this.fs.write(this.destinationPath('README.md'),tpl({
           generatorName: this.props.name,
@@ -134,6 +135,7 @@ module.exports = generators.Base.extend({
       npm: true,
       bower: false
     });
+   
     /* this.npmInstall(['connect-livereload',
       'grunt',
       'grunt-contrib-concat',

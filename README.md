@@ -15,8 +15,9 @@ yo mygen
 ## 项目相关命令
  * yo mygen -h 查看生成器所有配置
  * grunt live  若自动刷新服务127.0.0.1:8089 未能启动，则检查Gruntfile.js 中web服务器根目录位置
- * grunt dist  部署项目代码
-
+ * grunt dist  部署项目构建后代码
+ * grunt dev   部署开发代码
+ * grunt       默认命令grunt live
 ## 有关yeoman
 
  * Yeoman has a heart of gold.
@@ -40,4 +41,5 @@ yo mygen
 
  ### v1.2.9
  * 优化css压缩程序配置参数以保留ie6/ie7 css hack例如`_background`|`*background`等等 
- 
+ ### v1.3.0
+ * 修复非模板文件copy方式为bulkCopy解决初始化失败问题
